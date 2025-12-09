@@ -5,10 +5,10 @@ import bisect
 class Ordered(Protocol):
     """Protocol for types that support ordering operations."""
 
-    def __le__(self, other: "Ordered") -> bool: ...
-    def __lt__(self, other: "Ordered") -> bool: ...
-    def __ge__(self, other: "Ordered") -> bool: ...
-    def __gt__(self, other: "Ordered") -> bool: ...
+    def __le__(self, other, /) -> bool: ...
+    def __lt__(self, other, /) -> bool: ...
+    def __ge__(self, other, /) -> bool: ...
+    def __gt__(self, other, /) -> bool: ...
 
 
 class Ranges[T: Ordered]:
@@ -31,11 +31,6 @@ class Ranges[T: Ordered]:
 
     def __getitem__(self, idx: int) -> tuple[T, T]:
         return self.ranges[idx]
-
-    def __setitem__(self, idx: int, value: tuple[T, T]) -> None:
-        if not value[0] <= value[1]:
-            raise ValueError(f"Invalid range: [{value[0]}, {value[1]}]")
-        self.ranges[idx] = value
 
     def __delitem__(self, idx: int) -> None:
         del self.ranges[idx]
@@ -72,7 +67,7 @@ class Ranges[T: Ordered]:
             left = self[idx - 1]
             if left[1] >= range[0]:
                 left = (left[0], max(left[1], range[1]))
-                self[idx - 1] = left
+                self.ranges[idx - 1] = left
                 idx -= 1
             else:
                 self.ranges.insert(idx, range)
@@ -81,10 +76,15 @@ class Ranges[T: Ordered]:
             self.ranges.insert(0, range)
             left = range
 
-        if idx < len(self.ranges) - 1:
-            right = self[idx + 1]
+        idx_right = idx + 1
+        while idx_right < len(self.ranges) and left[1] >= self[idx_right][1]:
+            idx_right += 1
+        del self.ranges[idx + 1 : idx_right]
+
+        if idx + 1 < len(self.ranges):
+            right = self.ranges[idx + 1]
             if left[1] >= right[0]:
-                self[idx] = (left[0], max(left[1], right[1]))
+                self.ranges[idx] = (left[0], max(left[1], right[1]))
                 del self.ranges[idx + 1]
 
     def check(self, val: T) -> bool:
@@ -96,14 +96,25 @@ class Ranges[T: Ordered]:
         :return: True if `val` is within any range, False otherwise
         :rtype: bool
         """
+        return self.find(val) is not None
+
+    def find(self, val: T) -> tuple[T, T] | None:
+        """
+        find returns the range that contains `val`, or None if not found.
+
+        :param val: The value to find
+        :type val: T
+        :return: The range containing `val`, or None
+        :rtype: tuple[T, T] | None
+        """
         idx = bisect.bisect_right(self.ranges, (val, val))
 
         if idx > 0:
             if self[idx - 1][1] >= val:
-                return True
+                return self[idx - 1]
 
         if idx < len(self.ranges):
             if self[idx][0] <= val:
-                return True
+                return self[idx]
 
-        return False
+        return None
