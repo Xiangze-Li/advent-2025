@@ -1,4 +1,4 @@
-def solve(data: str) -> None:
+def solve(data: str):
     lines = data.splitlines()
     N = len(lines[0])
 
@@ -19,11 +19,12 @@ def solve(data: str) -> None:
                 beams[s] = 0
                 count += 1
 
-    print(count)
-    print(sum(beams))
+    yield count
+    yield sum(beams)
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
-    solve(example.get(7))
+    for res in solve(get(7)):
+        print(res)

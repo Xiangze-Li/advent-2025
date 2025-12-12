@@ -1,13 +1,13 @@
 from math import prod
 
 
-def solve(data: str) -> None:
+def solve(data: str):
     lines = data.splitlines()
-    part1(lines)
-    part2(lines)
+    yield part1(lines)
+    yield part2(lines)
 
 
-def part1(lines: list[str]) -> None:
+def part1(lines: list[str]):
     nums = [line.split() for line in lines]
     N_OP = len(nums) - 1
     N_COL = len(nums[0])
@@ -20,9 +20,10 @@ def part1(lines: list[str]) -> None:
         else:
             total += prod(int(nums[row][col]) for row in range(N_OP))
 
-    print(total)
+    return total
 
-def part2(lines: list[str]) -> None:
+
+def part2(lines: list[str]):
     col = max(len(line) for line in lines) - 1
     for i in range(len(lines)):
         lines[i] = lines[i].ljust(col + 1)
@@ -50,10 +51,11 @@ def part2(lines: list[str]) -> None:
                 break
         col -= 1
 
-
-    print(total)
+    return total
 
 
 if __name__ == "__main__":
-    import example
-    solve(example.get(6))
+    from example import get
+
+    for res in solve(get(6)):
+        print(res)

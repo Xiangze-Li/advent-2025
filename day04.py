@@ -1,7 +1,7 @@
-import utils
+import pkg.utils as utils
 
 
-def solve(data: str) -> None:
+def solve(data: str):
     grids = data.splitlines()
     I, J = len(grids), len(grids[0])
     adj: dict[tuple[int, int], int] = {}
@@ -19,7 +19,7 @@ def solve(data: str) -> None:
     initial_size = len(adj)
 
     to_remove: set[tuple[int, int]] = {k for k in adj if adj[k] < 4}
-    print(len(to_remove))
+    yield len(to_remove)
 
     while len(to_remove) > 0:
         next_remove: set[tuple[int, int]] = set()
@@ -34,10 +34,11 @@ def solve(data: str) -> None:
                         next_remove.add((ni, nj))
         to_remove = next_remove
 
-    print(initial_size - len(adj))
+    yield initial_size - len(adj)
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
-    solve(example.get(4))
+    for res in solve(get(4)):
+        print(res)

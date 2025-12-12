@@ -1,7 +1,7 @@
 import itertools
 
 
-def solve(data: str) -> None:
+def solve(data: str):
     coords: list[tuple[int, int]] = [
         tuple(map(int, line.split(",", 2))) for line in data.splitlines()
     ]  # type: ignore
@@ -28,11 +28,12 @@ def solve(data: str) -> None:
         else:
             area_2 = max(area_2, area)
 
-    print(area_1)
-    print(area_2)
+    yield area_1
+    yield area_2
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
-    solve(example.get(9))
+    for res in solve(get(9)):
+        print(res)

@@ -1,0 +1,4 @@
+[project]
+name = "advent-2025"
+version = "1.0.0"
+dependencies = ["requests", "tabulate2", "sortedcollections", "pulp"]

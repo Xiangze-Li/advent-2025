@@ -1,4 +1,4 @@
-def solve(data: str) -> None:
+def solve(data: str):
     blocks = data.split("\n\n")
     patterns: list[list[bool]] = []
     for block in blocks[:-1]:
@@ -14,11 +14,12 @@ def solve(data: str) -> None:
             sum(pattern) * count for pattern, count in zip(patterns, targets)
         )
 
-    print(total)
-    print("Happy holiday!")
+    yield total
+    yield "Happy holiday!"
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
-    solve(example.get(12))
+    for res in solve(get(12)):
+        print(res)

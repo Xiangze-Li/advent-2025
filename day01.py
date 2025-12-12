@@ -1,4 +1,4 @@
-def solve(data: str) -> None:
+def solve(data: str):
     lines = data.splitlines()
 
     pos = 50
@@ -27,6 +27,13 @@ def solve(data: str) -> None:
             stopAt += 1
             passed += 1
 
-    print(stopAt)
-    print(passed)
-    print("method 0x434C49434B means " + bytes.fromhex("434C49434B").decode())
+    yield stopAt
+    yield passed
+    yield "method 0x434C49434B means " + bytes.fromhex("434C49434B").decode()
+
+
+if __name__ == "__main__":
+    from example import get
+
+    for res in solve(get(1)):
+        print(res)

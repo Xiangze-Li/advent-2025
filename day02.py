@@ -1,7 +1,7 @@
 import math
 
 
-def solve(data: str) -> None:
+def solve(data: str):
     ranges = [s.split("-", 2) for s in data.split(",")]
 
     ids_1: set[int] = set()
@@ -11,8 +11,8 @@ def solve(data: str) -> None:
         ids_1.update(ids_1_update)
         ids_2.update(ids_2_update)
 
-    print(sum(ids_1))
-    print(sum(ids_2))
+    yield sum(ids_1)
+    yield sum(ids_2)
 
 
 def solve_range(lb: int, ub: int) -> tuple[set[int], set[int]]:
@@ -45,5 +45,7 @@ def solve_range(lb: int, ub: int) -> tuple[set[int], set[int]]:
 
 
 if __name__ == "__main__":
-    import example
-    solve(example.get(2))
+    from example import get
+
+    for res in solve(get(2)):
+        print(res)

@@ -1,10 +1,9 @@
-from collections import deque
 from itertools import chain, combinations
 
 import pulp
 
 
-def solve(data: str) -> None:
+def solve(data: str):
     light_count = 0
     joltage_count = 0
     for fields in map(str.split, data.splitlines()):
@@ -30,8 +29,8 @@ def solve(data: str) -> None:
 
         joltage_count += lp_solve(buttons, joltage)
 
-    print(light_count)
-    print(joltage_count)
+    yield light_count
+    yield joltage_count
 
 
 def lp_solve(buttons: list[tuple[int, ...]], target: tuple[int, ...]) -> int:
@@ -53,6 +52,7 @@ def lp_solve(buttons: list[tuple[int, ...]], target: tuple[int, ...]) -> int:
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
-    solve(example.get(10))
+    for res in solve(get(10)):
+        print(res)

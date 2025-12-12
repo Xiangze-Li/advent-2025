@@ -1,9 +1,8 @@
-def solve(data: str) -> None:
+def solve(data: str):
     g = {sp[0][:-1]: sp[1:] for sp in map(str.split, data.splitlines())}
 
-    print(dfs1("you", g))
-    print(dfs2("svr", g), "out of", dfs1("svr", g))
-    pass
+    yield dfs1("you", g)
+    yield dfs2("svr", g), "out of", dfs1("svr", g)
 
 
 def dfs1(node: str, g: dict[str, list[str]]) -> int:
@@ -42,6 +41,7 @@ def dfs2(node: str, g: dict[str, list[str]]) -> int:
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
-    solve(example.get(11))
+    for res in solve(get(11)):
+        print(res)

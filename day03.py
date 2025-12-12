@@ -1,4 +1,4 @@
-def solve(data: str) -> None:
+def solve(data: str):
     joltage_1 = 0
     joltage_2 = 0
 
@@ -6,8 +6,8 @@ def solve(data: str) -> None:
         joltage_1 += solve_line(line, 2)
         joltage_2 += solve_line(line, 12)
 
-    print(joltage_1)
-    print(joltage_2)
+    yield joltage_1
+    yield joltage_2
 
 
 def solve_line(line: str, count: int) -> int:
@@ -31,6 +31,7 @@ def solve_line(line: str, count: int) -> int:
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
-    solve(example.get(3))
+    for res in solve(get(3)):
+        print(res)

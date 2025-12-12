@@ -5,7 +5,7 @@ from sortedcollections import SortedDict
 n = 1000
 
 
-def solve(data: str) -> None:
+def solve(data: str):
     cords: list[tuple[int, int, int]] = []
     for line in data.splitlines():
         x, y, z = map(int, line.split(","))
@@ -32,15 +32,16 @@ def solve(data: str) -> None:
         if connection == n:
             vals = list(circuits.values())
             vals.sort(key=len, reverse=True)
-            print(math.prod(len(v) for v in vals[:3]))
+            yield math.prod(len(v) for v in vals[:3])
 
         if len(circuits) == 1:
-            print(cords[i][0] * cords[j][0])
+            yield cords[i][0] * cords[j][0]
             break
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
     n = 10
-    solve(example.get(8))
+    for res in solve(get(8)):
+        print(res)

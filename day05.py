@@ -1,7 +1,7 @@
-import ranges
+import pkg.ranges as ranges
 
 
-def solve(data: str) -> None:
+def solve(data: str):
     sp = data.split("\n\n", 2)
     range = ranges.Ranges()
     for line in sp[0].splitlines():
@@ -13,12 +13,13 @@ def solve(data: str) -> None:
         if range.check(int(val)):
             count += 1
 
-    print(count)
+    yield count
 
-    print(sum(ub - lb + 1 for lb, ub in range))
+    yield sum(ub - lb + 1 for lb, ub in range)
 
 
 if __name__ == "__main__":
-    import example
+    from example import get
 
-    solve(example.get(5))
+    for res in solve(get(5)):
+        print(res)
